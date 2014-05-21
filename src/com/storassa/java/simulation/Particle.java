@@ -9,19 +9,8 @@ public class Particle {
 	private double[] momentum;
 	private double mass;
 	private int dimensions;
-	private double[] force;
+	private ArrayList<Force> force;
 	private long currentTime;
-
-	public Particle(double _mass, double[] _position, double[] _momentum,
-			long _time) {
-		dimensions = 3;
-		mass = _mass;
-		position = _position;
-		momentum = _momentum;
-
-		force = new double[dimensions];
-		currentTime = _time;
-	}
 
 	public Particle(Particle _p) {
 		dimensions = _p.getPosition().length;
@@ -32,7 +21,7 @@ public class Particle {
 			momentum[i] = _p.getMomentum()[i];
 		}
 		mass = _p.getMass();
-		force = new double[dimensions];
+		force = new ArrayList<Force>();
 		currentTime = _p.getTime();
 	}
 
@@ -43,7 +32,7 @@ public class Particle {
 		position = _position;
 		momentum = _momentum;
 
-		force = new double[dimensions];
+		force = new ArrayList<Force>();
 		currentTime = _time;
 	}
 
@@ -51,8 +40,12 @@ public class Particle {
 		return "x: " + getPosition()[0] + ", y: " + getPosition()[1];
 	}
 
-	public void setForce(double[] _force) {
+	public synchronized void setForce(ArrayList<Force> _force) {
 		force = _force;
+	}
+
+	public synchronized void addForce(Force _force) {
+		force.add(_force);
 	}
 
 	public void setPosition(double[] _pos) {
@@ -75,12 +68,14 @@ public class Particle {
 		position[0] -= l;
 	}
 
-	public void updateState(long time) {
+	public synchronized void updateState(long time) {
 		long elapsedTime = -currentTime + (currentTime = time);
 
 		for (int i = 0; i < dimensions; i++) {
 			position[i] += momentum[i] / mass * elapsedTime / 1000;
-			momentum[i] += force[i] / mass * elapsedTime / 1000;
+			for (Force currentForce : force) {
+				momentum[i] += currentForce.getComponents()[i] / mass * elapsedTime / 1000;
+			}
 		}
 	}
 
@@ -92,7 +87,7 @@ public class Particle {
 		return momentum;
 	}
 
-	public double[] getForce() {
+	public ArrayList<Force> getForceList() {
 		return force;
 	}
 

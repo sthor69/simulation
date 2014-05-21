@@ -29,8 +29,8 @@ public class DrawForce extends JPanel {
 		int lastY = 0;
 		for (int i = 1; i < 200; i++) {
 			p.moveRight(1);
-			g.drawLine(i - 1, lastY, i,
-					lastY = (int) s.getForce()[0] + 100);
+//			g.drawLine(i - 1, lastY, i,
+//					lastY = (int) s.getForce()[0] + 100);
 		}
 	}
 

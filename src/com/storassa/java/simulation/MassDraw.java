@@ -6,7 +6,7 @@ import java.awt.geom.Ellipse2D;
 
 import javax.swing.JPanel;
 
-public class Mass extends JPanel {
+public class MassDraw extends JPanel {
 
 	/**
 	 * 
@@ -14,7 +14,7 @@ public class Mass extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Particle[] p;
 
-	public Mass(Particle[] _p) {
+	public MassDraw(Particle[] _p) {
 		p = _p;
 	}
 
